@@ -1,13 +1,19 @@
 #include "Game.h"
 
+using namespace std;
+
 class GameMenu
 {
-public:
+private:
   Game *games;
+
+public:
+  int gameAmount;
 
 public:
   GameMenu();
   GameMenu(int amount);
   ~GameMenu();
-  void addGames();
+  Game getGame(int index);
+  bool addGames(Game *game);
 };

@@ -17,6 +17,7 @@ public:
 public:
   Game();
   Game(string pName, string pDesc, bool isTwo);
+  ~Game();
   string getName();
   string getDesc();
   int getGameAmount();

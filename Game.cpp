@@ -20,9 +20,20 @@ Game::Game(string pName, string pDesc, bool twoPl)
   setGameAmount(1);
 }
 
+Game::~Game()
+{
+}
+
 string Game::getName()
 {
-  return name;
+  if (name != "")
+  {
+    return name;
+  }
+  else
+  {
+    return "";
+  }
 }
 
 string Game::getDesc()
@@ -37,6 +48,5 @@ int Game::getGameAmount()
 
 void Game::setGameAmount(int amount)
 {
-  cout << "Counting..." << endl;
   count += amount;
 }
