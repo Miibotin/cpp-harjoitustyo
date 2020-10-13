@@ -10,6 +10,8 @@ Jaan tänne vaan mun task-komennot...
         "${workspaceFolder}/*.cpp*",
         "|",
         "g++",
+        "-o",
+        "Main.exe",
         "${workspaceFolder}/*.o*"
       ],
       "presentation": {
@@ -20,7 +22,9 @@ Jaan tänne vaan mun task-komennot...
         "showReuseMessage": true,
         "clear": false
       },
-      "problemMatcher": []
+      "problemMatcher": [
+        "$gcc"
+      ]
     },
     {
       "type": "shell",
@@ -30,6 +34,8 @@ Jaan tänne vaan mun task-komennot...
         "-Force",
         "${workspaceFolder}/*.o*"
       ],
-      "problemMatcher": []
+      "problemMatcher": [
+        "$gcc"
+      ]
     }
 ```
