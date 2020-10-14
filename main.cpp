@@ -24,6 +24,9 @@ GameMenu *initGames()
   game->addGames(helloBoard);
   game->addGames(emptyBoard);
 
+  // LISÄÄ PELISI TÄHÄN, JOTTA EI MUISTIA KARKAA
+  delete board, helloBoard, emptyBoard;
+
   return game;
 }
 
@@ -35,10 +38,10 @@ int main(void)
   {
     for (int i = 0; i < game->gameAmount; i++)
     {
-      cout << "Peli #" << i << ": " << game->getGame(i).getName() << "\t" << endl;
+      cout << "Peli #" << i << ": " << game->getGame(i).getName() << "\t";
     }
   }
-
+  cout << endl;
   // cin.get();
   return 0;
 }
