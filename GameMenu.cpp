@@ -2,10 +2,19 @@
 #include "Game.h"
 #include <iostream>
 
-GameMenu::GameMenu(int size)
+GameMenu::GameMenu()
+{
+  int size = 0;
+  games = new Game[size];
+  gameAmount = size;
+  welcomeLetter = "This is just a placeholder, which means the gamemenu was not initialized properly. Please correct the mistake and try again.";
+}
+
+GameMenu::GameMenu(int size, string pLetter)
 {
   games = new Game[size];
   gameAmount = size;
+  welcomeLetter = pLetter;
 }
 
 GameMenu::~GameMenu()
@@ -55,4 +64,9 @@ Game GameMenu::getGame(int index)
     Game empty;
     return empty;
   }
+}
+
+string GameMenu::welcome()
+{
+  return welcomeLetter;
 }
