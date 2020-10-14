@@ -18,8 +18,6 @@ GameMenu *initGame()
 
   int amount = Game::count;
 
-  cout << "Pelejä on " << amount << endl;
-
   // PELI-VALIKON ALUSTUS
   GameMenu *game = new GameMenu(amount, "TERVETULOA PELAAMAAN! OLE HYVÄ JA VALITSE PELI KIRJOITTAMALLA SITÄ VASTAAVA NUMERO!");
 
@@ -38,11 +36,17 @@ GameMenu *initGame()
   return game;
 }
 
-int main(void)
+void startMenu(GameMenu *game)
 {
   string choice;
   int gameOption;
-  GameMenu *game = initGame();
+
+  if (game->gameAmount == 0)
+  {
+    cout << "An error has occured: the amount of games initialized is " << game->gameAmount << ". Please fix the error and try again." << endl;
+    cin.get();
+    return;
+  }
 
   cout << "********************************************************************" << endl
        << "*  *    *    *   ****   *       ****     ****     *     *    ****  *" << endl
@@ -57,21 +61,20 @@ int main(void)
   {
     cout << game->welcome() << "\n"
          << endl;
-    if (game->gameAmount > 0)
+
+    for (int i = 0; i < game->gameAmount; i++)
     {
-      for (int i = 0; i < game->gameAmount; i++)
+      cout << "Peli #" << (i + 1) << ": " << game->getGame(i).getName();
+      if ((i + 1) % 3 == 0)
       {
-        cout << "Peli #" << (i + 1) << ": " << game->getGame(i).getName();
-        if ((i + 1) % 3 == 0)
-        {
-          cout << endl;
-        }
-        else
-        {
-          cout << "\t";
-        }
+        cout << endl;
+      }
+      else
+      {
+        cout << "\t";
       }
     }
+
     cout << endl;
 
     cout << "\nMuita komentoja: Lopeta (exit)" << endl;
@@ -86,12 +89,20 @@ int main(void)
     }
     catch (const std::exception &e)
     {
-      std::cerr << e.what() << '\n';
+      cerr << "Ole hyvä ja anna luku 1 ja" << game->gameAmount << " väliltä!" << endl;
+      cin.get();
+      cin.get();
     }
 
     cout << "\n\n\n\n\n\n"
          << endl;
   } while (true);
+}
+
+int main(void)
+{
+  GameMenu *game = initGame();
+  startMenu(game);
 
   // cin.get();
   return 0;
