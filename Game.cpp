@@ -9,7 +9,7 @@ Game::Game()
   name = "Placeholder";
   description = "lorem ipsum";
   twoPlayers = false;
-  setGameAmount(1);
+  count++;
 }
 
 Game::Game(string pName, string pDesc, bool twoPl)
@@ -17,11 +17,12 @@ Game::Game(string pName, string pDesc, bool twoPl)
   name = pName;
   description = pDesc;
   twoPlayers = twoPl;
-  setGameAmount(1);
+  count++;
 }
 
 Game::~Game()
 {
+  count--;
 }
 
 string Game::getName()
@@ -46,7 +47,3 @@ int Game::getGameAmount()
   return count;
 }
 
-void Game::setGameAmount(int amount)
-{
-  count += amount;
-}

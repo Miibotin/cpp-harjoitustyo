@@ -21,5 +21,4 @@ public:
   string getName();
   string getDesc();
   int getGameAmount();
-  void setGameAmount(int amount);
 };

@@ -4,7 +4,7 @@
 
 using namespace std;
 
-int Game::count = 0;
+int Game::count = 0; // Vain alun pelien alustusta varten. Muuten tätä ei enää käytetä tulevaisuudessa.
 
 GameMenu *initGames()
 {
@@ -42,6 +42,7 @@ int main(void)
     }
   }
   cout << endl;
+  cout << game->gameAmount << endl;
   // cin.get();
   return 0;
 }
