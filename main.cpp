@@ -1,16 +1,12 @@
 #include "Game.h"
 #include "GameMenu.h"
+#include "Minesweeper.h"
 #include <iostream>
 #include <memory>
 
 using namespace std;
 
 int Game::count = 0; // Vain alun pelien alustusta varten. Muuten tätä ei enää käytetä tulevaisuudessa.
-
-void hello()
-{
-  cout << "Hei tää toimii!" << endl;
-}
 
 void kakka()
 {
@@ -21,7 +17,7 @@ GameMenu initGames()
 {
 
   // TÄMÄ ALAPUOLELLE KAIKKI PELIT
-  Game board("Miinaharava", &hello, "Tämä on hankalaa!");
+  Game board("Miinaharava", &initMinesweeper, "Tämä on hankalaa!");
   Game helloBoard("Hello World!", &kakka);
   Game emptyBoard;
   // TÄMÄN YLÄPUOLELLE KAIKKI PELIT
