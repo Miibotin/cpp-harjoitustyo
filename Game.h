@@ -1,6 +1,7 @@
 // Game-luokan header
 #pragma once
 #include <string>
+#include <functional>
 
 using namespace std;
 
@@ -13,10 +14,11 @@ private:
 public:
   static int count;
   bool twoPlayers;
+  function<void()> func;
 
 public:
   Game();
-  Game(string pName, string pDesc, bool isTwo);
+  Game(string pName, bool isTwo, function<void()> pFunc, string pDesc = "");
   ~Game();
   string getName();
   string getDesc();

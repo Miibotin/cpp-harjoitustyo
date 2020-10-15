@@ -1,23 +1,25 @@
 #include <string>
 #include <iostream>
+#include <functional>
 #include "Game.h"
 
 using namespace std;
 
 Game::Game()
 {
-  name = "Placeholder";
-  description = "lorem ipsum";
+  name = "";
+  description = "This is just a placeholder text, which means this game is either non-existent or developer forgot to include any description for this.";
   twoPlayers = false;
   count++;
 }
 
-Game::Game(string pName, string pDesc, bool twoPl)
+Game::Game(string pName, bool twoPl, function<void()> pFunc, string pDesc)
 {
   name = pName;
   description = pDesc;
   twoPlayers = twoPl;
   count++;
+  func = pFunc;
 }
 
 Game::~Game()
@@ -46,4 +48,3 @@ int Game::getGameAmount()
 {
   return count;
 }
-

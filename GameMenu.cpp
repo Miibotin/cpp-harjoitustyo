@@ -19,20 +19,25 @@ GameMenu::GameMenu(int size, string pLetter)
 
 GameMenu::~GameMenu()
 {
-  cout << "Releasing memory... ";
+  // cout << "Releasing memory... ";
   delete[] games;
-  cout << "Done!" << endl;
+  // cout << "Done!" << endl;
 }
 
-bool GameMenu::addGames(Game *g)
+bool GameMenu::addGames(Game g)
 {
   bool val;
 
+  if (g.getName() == "")
+  {
+    val = false;
+  }
+
   for (int i = 0; i < gameAmount; i++)
   {
-    if (games[i].getName() == "Placeholder")
+    if (games[i].getName() == "")
     {
-      games[i] = *g;
+      games[i] = g;
       val = true;
       break;
     }
@@ -60,7 +65,7 @@ Game GameMenu::getGame(int index)
   }
   else
   {
-    cout << "Error: no game found on index " << index << endl;
+    cout << "Error: no game found!";
     Game empty;
     return empty;
   }

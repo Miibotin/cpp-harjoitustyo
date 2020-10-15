@@ -1,6 +1,7 @@
 #pragma once
 #include "Game.h"
 #include <string>
+#include <memory>
 
 using namespace std;
 
@@ -18,6 +19,6 @@ public:
   GameMenu(int amount, string pLetter);
   ~GameMenu();
   Game getGame(int index);
-  bool addGames(Game *game);
+  bool addGames(Game g);
   string welcome();
 };
