@@ -13,12 +13,11 @@ private:
 
 public:
   static int count;
-  bool twoPlayers;
-  function<void()> func;
+  function<void()> start;
 
 public:
   Game();
-  Game(string pName, bool isTwo, function<void()> pFunc, string pDesc = "");
+  Game(string pName, function<void()> pFunc, string pDesc = "");
   ~Game();
   string getName();
   string getDesc();

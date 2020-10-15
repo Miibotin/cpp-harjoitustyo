@@ -65,7 +65,6 @@ Game GameMenu::getGame(int index)
   }
   else
   {
-    cout << "Error: no game found!";
     Game empty;
     return empty;
   }

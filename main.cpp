@@ -21,8 +21,8 @@ GameMenu initGames()
 {
 
   // TÄMÄ ALAPUOLELLE KAIKKI PELIT
-  Game board("Miinaharava", false, &hello, "Tämä on hankalaa!");
-  Game helloBoard("Hello World!", false, &kakka);
+  Game board("Miinaharava", &hello, "Tämä on hankalaa!");
+  Game helloBoard("Hello World!", &kakka);
   Game emptyBoard;
   // TÄMÄN YLÄPUOLELLE KAIKKI PELIT
 
@@ -40,6 +40,53 @@ GameMenu initGames()
   }
 
   return game;
+}
+
+void showDescription(Game g)
+{
+  cout << "\n\n\n\n\n\n\n\n\n"
+       << endl;
+  string choice;
+  int gameOption;
+  bool loop = true;
+
+  do
+  {
+    cout << "Peli: " << g.getName() << "\n\n\n"
+         << "Lisätietoja: " << g.getDesc() << "\n\n"
+         << "Toiminnot: Pelaa (1), Takaisin (2)" << endl;
+
+    cin >> choice;
+
+    try
+    {
+      gameOption = stoi(choice);
+
+      switch (gameOption)
+      {
+      case 1:
+        g.start();
+        break;
+      case 2:
+        loop = false;
+        break;
+      default:
+        cout << "Ole hyvä ja anna toimintoja vastaava luku!" << endl;
+        cin.get();
+        cin.get();
+        break;
+      }
+    }
+    catch (const std::exception &e)
+    {
+      cerr << "Ole hyvä ja anna toimintoja vastaava luku!" << endl;
+      cin.get();
+      cin.get();
+    }
+
+    cout << "\n\n\n\n\n\n\n\n\n"
+         << endl;
+  } while (loop);
 }
 
 void startMenu(GameMenu game)
@@ -70,7 +117,11 @@ void startMenu(GameMenu game)
 
     for (int i = 0; i < game.gameAmount; i++)
     {
-      cout << "Peli #" << (i + 1) << ": " << game.getGame(i).getName();
+      string name = game.getGame(i).getName();
+      if (name == "")
+        name = "Error: no game found!";
+
+      cout << "Peli #" << (i + 1) << ": " << name;
 
       // Lisää uuden rivin iteraation perään mikäli kyseinen iteraatio on rivin kolmas ja se ei ole viimeinen iteraatio
       if ((i + 1) % 3 == 0 && (i + 1) != game.gameAmount)
@@ -94,18 +145,19 @@ void startMenu(GameMenu game)
     try
     {
       gameOption = stoi(choice);
+      showDescription(game.getGame((gameOption - 1)));
     }
     catch (const std::exception &e)
     {
-      cerr << "Ole hyvä ja anna luku 1 ja" << game.gameAmount << " väliltä!" << endl;
+      cerr << "Ole hyvä ja anna luku 1 ja " << game.gameAmount << " väliltä!" << endl;
       cin.get();
       cin.get();
+      gameOption = 0;
     }
 
-    game.getGame((gameOption - 1)).func();
-
-    cout << "\n\n\n\n\n\n"
+    cout << "\n\n\n\n\n\n\n\n\n"
          << endl;
+
   } while (true);
 }
 
