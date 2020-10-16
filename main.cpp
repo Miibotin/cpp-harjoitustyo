@@ -48,9 +48,9 @@ void showDescription(Game g)
 
   do
   {
-    cout << "Peli: " << g.getName() << "\n\n\n"
-         << "Lisätietoja: " << g.getDesc() << "\n\n"
-         << "Toiminnot: Pelaa (1), Takaisin (2)" << endl;
+    cout << "Game: " << g.getName() << "\n\n\n"
+         << "Description: " << g.getDesc() << "\n\n"
+         << "Options: Play (1), Back (2)" << endl;
 
     cin >> choice;
 
@@ -67,7 +67,7 @@ void showDescription(Game g)
         loop = false;
         break;
       default:
-        cout << "Ole hyvä ja anna toimintoja vastaava luku!" << endl;
+        cout << "Please give a number representing one of the options above!" << endl;
         cin.get();
         cin.get();
         break;
@@ -75,7 +75,7 @@ void showDescription(Game g)
     }
     catch (const std::exception &e)
     {
-      cerr << "Ole hyvä ja anna toimintoja vastaava luku!" << endl;
+      cerr << "Please give a number representing one of the options above!" << endl;
       cin.get();
       cin.get();
     }
@@ -117,7 +117,7 @@ void startMenu(GameMenu game)
       if (name == "")
         name = "Error: no game found!";
 
-      cout << "Peli #" << (i + 1) << ": " << name;
+      cout << "Game #" << (i + 1) << ": " << name;
 
       // Lisää uuden rivin iteraation perään mikäli kyseinen iteraatio on rivin kolmas ja se ei ole viimeinen iteraatio
       if ((i + 1) % 3 == 0 && (i + 1) != game.gameAmount)
@@ -132,7 +132,7 @@ void startMenu(GameMenu game)
 
     cout << endl;
 
-    cout << "\nMuita komentoja: Lopeta (exit)" << endl;
+    cout << "\nOther actions: Quit (exit)" << endl;
     cin >> choice;
 
     if (choice == "exit" || choice == "EXIT")
@@ -145,7 +145,7 @@ void startMenu(GameMenu game)
     }
     catch (const std::exception &e)
     {
-      cerr << "Ole hyvä ja anna luku 1 ja " << game.gameAmount << " väliltä!" << endl;
+      cerr << "Please give a proper number between 1 and " << game.gameAmount << "!" << endl;
       cin.get();
       cin.get();
       gameOption = 0;
