@@ -11,7 +11,7 @@
 using namespace std;
 
 // Rakennetaan lauta
-void build(vector<vector<char>> matrix, vector<vector<int>> bombs = vector<vector<int>>())
+void buildBoard(vector<vector<char>> matrix, vector<vector<int>> bombs = vector<vector<int>>())
 {
   char letter = 'A';
 
@@ -58,87 +58,6 @@ void build(vector<vector<char>> matrix, vector<vector<int>> bombs = vector<vecto
       }
     }
     cout << endl;
-  }
-}
-
-int checkBombs(int xCoord, int yCoord, vector<vector<int>> bombs) { return bombs[yCoord][xCoord] == 1 ? 1 : 0; }
-
-bool analyzeSelf(int xCoord, int yCoord, vector<vector<char>> &matrix, vector<vector<int>> bombs)
-{
-  // MUUTA SITEN, ETTÄ NAAPURI-PAIKKOJEN ALUEET TUTKITAAN JA CLEANUP-FUNKTIO LAUAKAISTAAN JOS YMPÄRILLÄ EI OLE YHTÄÄN POMMIA
-  int bombsAround = 0;
-
-  // Yläpuolinen x-akseli, jos on
-  if (yCoord != 0)
-  {
-    int yUp = yCoord - 1;
-
-    // Ylävasen
-    if (xCoord != 0)
-    {
-      int xLeft = xCoord - 1;
-      bombsAround += checkBombs(xLeft, yUp, bombs);
-    }
-
-    // Yläkeski
-    bombsAround += checkBombs(xCoord, yUp, bombs);
-
-    // Yläoikea
-    if (xCoord != (matrix[0].size() - 1))
-    {
-      int xRight = xCoord + 1;
-      bombsAround += checkBombs(xRight, yUp, bombs);
-    }
-  }
-
-  // Saman y-akselin x-akseli
-  if (xCoord != 0)
-  {
-    int xLeft = xCoord - 1;
-    bombsAround += checkBombs(xLeft, yCoord, bombs);
-  }
-  if (xCoord != (matrix[0].size() - 1))
-  {
-    int xRight = xCoord + 1;
-    bombsAround += checkBombs(xRight, yCoord, bombs);
-  }
-
-  // Alapuolinen x-akseli, jos on
-  if (yCoord != (matrix.size() - 1))
-  {
-    int yDown = yCoord + 1;
-
-    // Alavasen
-    if (xCoord != 0)
-    {
-      int xLeft = xCoord - 1;
-      if (bombs[yDown][xLeft] == 1)
-        bombsAround += checkBombs(xLeft, yDown, bombs);
-    }
-
-    // Alakeski
-    bombsAround += checkBombs(xCoord, yDown, bombs);
-
-    // Alaoikea
-    if (xCoord != (matrix[0].size() - 1))
-    {
-      int xRight = xCoord + 1;
-      bombsAround += checkBombs(xRight, yDown, bombs);
-    }
-  }
-
-  // Jos löytyy pommeja lähettyviltä, tulostetaan niiden määrä koordinaattiin ja palautetaan false
-  if (bombsAround > 0)
-  {
-    char c = '0';
-    c += bombsAround;
-    matrix[yCoord][xCoord] = c;
-    return false;
-  }
-  else
-  {
-    matrix[yCoord][xCoord] = ',';
-    return true;
   }
 }
 
@@ -215,6 +134,86 @@ void analyzeNeighbours(int xCoord, int yCoord, vector<vector<char>> &matrix, vec
   matrix[yCoord][xCoord] = ' ';
 }
 
+int checkBombs(int xCoord, int yCoord, vector<vector<int>> bombs) { return bombs[yCoord][xCoord] == 1 ? 1 : 0; }
+
+void analyzeSelf(int xCoord, int yCoord, vector<vector<char>> &matrix, vector<vector<int>> bombs)
+{
+  // MUUTA SITEN, ETTÄ NAAPURI-PAIKKOJEN ALUEET TUTKITAAN JA CLEANUP-FUNKTIO LAUAKAISTAAN JOS YMPÄRILLÄ EI OLE YHTÄÄN POMMIA
+  int bombsAround = 0;
+
+  // Yläpuolinen x-akseli, jos on
+  if (yCoord != 0)
+  {
+    int yUp = yCoord - 1;
+
+    // Ylävasen
+    if (xCoord != 0)
+    {
+      int xLeft = xCoord - 1;
+      bombsAround += checkBombs(xLeft, yUp, bombs);
+    }
+
+    // Yläkeski
+    bombsAround += checkBombs(xCoord, yUp, bombs);
+
+    // Yläoikea
+    if (xCoord != (matrix[0].size() - 1))
+    {
+      int xRight = xCoord + 1;
+      bombsAround += checkBombs(xRight, yUp, bombs);
+    }
+  }
+
+  // Saman y-akselin x-akseli
+  if (xCoord != 0)
+  {
+    int xLeft = xCoord - 1;
+    bombsAround += checkBombs(xLeft, yCoord, bombs);
+  }
+  if (xCoord != (matrix[0].size() - 1))
+  {
+    int xRight = xCoord + 1;
+    bombsAround += checkBombs(xRight, yCoord, bombs);
+  }
+
+  // Alapuolinen x-akseli, jos on
+  if (yCoord != (matrix.size() - 1))
+  {
+    int yDown = yCoord + 1;
+
+    // Alavasen
+    if (xCoord != 0)
+    {
+      int xLeft = xCoord - 1;
+      if (bombs[yDown][xLeft] == 1)
+        bombsAround += checkBombs(xLeft, yDown, bombs);
+    }
+
+    // Alakeski
+    bombsAround += checkBombs(xCoord, yDown, bombs);
+
+    // Alaoikea
+    if (xCoord != (matrix[0].size() - 1))
+    {
+      int xRight = xCoord + 1;
+      bombsAround += checkBombs(xRight, yDown, bombs);
+    }
+  }
+
+  // Jos löytyy pommeja lähettyviltä, tulostetaan niiden määrä koordinaattiin ja palautetaan false
+  if (bombsAround > 0)
+  {
+    char c = '0';
+    c += bombsAround;
+    matrix[yCoord][xCoord] = c;
+  }
+  else
+  {
+    matrix[yCoord][xCoord] = ',';
+    analyzeNeighbours(xCoord, yCoord, matrix, bombs);
+  }
+}
+
 void cleanUp(vector<vector<char>> &matrix, vector<vector<int>> bombs)
 {
   bool loopEnd = false;
@@ -231,10 +230,7 @@ void cleanUp(vector<vector<char>> &matrix, vector<vector<int>> bombs)
           noChecks = false;
           int xCoord = j;
           int yCoord = i;
-          bool checkAround = analyzeSelf(xCoord, yCoord, matrix, bombs);
-
-          if (checkAround)
-            analyzeNeighbours(xCoord, yCoord, matrix, bombs);
+          analyzeSelf(xCoord, yCoord, matrix, bombs);
         }
       }
     }
@@ -243,7 +239,7 @@ void cleanUp(vector<vector<char>> &matrix, vector<vector<int>> bombs)
 }
 
 // Tsekataan kyseinen koordinaatti
-bool check(vector<vector<string>> inputs, vector<vector<char>> &matrix, vector<vector<int>> bombs, string choice = "NULL")
+bool checkCoordinate(vector<vector<string>> inputs, vector<vector<char>> &matrix, vector<vector<int>> bombs, string choice = "NULL")
 {
   transform(choice.begin(), choice.end(), choice.begin(), ::toupper); // Muutetaan merkit isoiksi (ei mitään hajua miksi vaaditaan noin, mut se toimii :D)
   bool skipped = false;
@@ -263,11 +259,7 @@ bool check(vector<vector<string>> inputs, vector<vector<char>> &matrix, vector<v
         {
           int xCoord = j;
           int yCoord = i;
-          bool checkAround = analyzeSelf(xCoord, yCoord, matrix, bombs);
-
-          if (checkAround)
-            analyzeNeighbours(xCoord, yCoord, matrix, bombs);
-
+          analyzeSelf(xCoord, yCoord, matrix, bombs);
           skipped = true;
         }
         break;
@@ -356,7 +348,7 @@ void minesweeperLoop(int pX, int pY, int pBombs)
   cout << "Done!\n\n\n"
        << endl;
 
-  build(symbolCoord);
+  buildBoard(symbolCoord);
 
   auto start = chrono::system_clock::now();
 
@@ -371,11 +363,11 @@ void minesweeperLoop(int pX, int pY, int pBombs)
       break;
 
     // Poistuu pelistä jos on false
-    if (!check(inputCoord, symbolCoord, bombCoord, choice))
+    if (!checkCoordinate(inputCoord, symbolCoord, bombCoord, choice))
     {
       cout << "\n\n\n\n\n\n\n"
            << endl;
-      build(symbolCoord, bombCoord);
+      buildBoard(symbolCoord, bombCoord);
       cout << "You lose! :(" << endl;
       cin.get();
       break;
@@ -389,7 +381,7 @@ void minesweeperLoop(int pX, int pY, int pBombs)
     bool victory = checkVictory(symbolCoord, pBombs);
 
     // Rakennetaan taulukko uusiksi
-    build(symbolCoord, victory ? bombCoord : vector<vector<int>>());
+    buildBoard(symbolCoord, victory ? bombCoord : vector<vector<int>>());
 
     if (victory)
     {
