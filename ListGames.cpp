@@ -2,6 +2,8 @@
 
 #include "GameMenu.h"
 #include "Game.h"
+
+// Include possible headers that your games uses
 #include "Minesweeper.h"
 
 int Game::count = 0; // Vain alun pelien alustusta varten. Muuten tätä ei enää käytetä tulevaisuudessa.

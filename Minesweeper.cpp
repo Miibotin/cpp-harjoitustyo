@@ -62,7 +62,9 @@ void build(vector<vector<char>> matrix, vector<vector<int>> bombs = vector<vecto
   }
 }
 
-bool analyzeCoordinate(int xCoord, int yCoord, vector<vector<char>> &matrix, vector<vector<int>> bombs)
+int checkBombs(int xCoord, int yCoord, vector<vector<int>> bombs) { return bombs[yCoord][xCoord] == 1 ? 1 : 0; }
+
+bool analyzeSelf(int xCoord, int yCoord, vector<vector<char>> &matrix, vector<vector<int>> bombs)
 {
   // MUUTA SITEN, ETTÄ NAAPURI-PAIKKOJEN ALUEET TUTKITAAN JA CLEANUP-FUNKTIO LAUAKAISTAAN JOS YMPÄRILLÄ EI OLE YHTÄÄN POMMIA
   int bombsAround = 0;
@@ -76,26 +78,17 @@ bool analyzeCoordinate(int xCoord, int yCoord, vector<vector<char>> &matrix, vec
     if (xCoord != 0)
     {
       int xLeft = xCoord - 1;
-      if (bombs[yUp][xLeft] == 1)
-      {
-        bombsAround++;
-      }
+      bombsAround += checkBombs(xLeft, yUp, bombs);
     }
 
     // Yläkeski
-    if (bombs[yUp][xCoord] == 1)
-    {
-      bombsAround++;
-    }
+    bombsAround += checkBombs(xCoord, yUp, bombs);
 
     // Yläoikea
     if (xCoord != (matrix[0].size() - 1))
     {
       int xRight = xCoord + 1;
-      if (bombs[yUp][xRight] == 1)
-      {
-        bombsAround++;
-      }
+      bombsAround += checkBombs(xRight, yUp, bombs);
     }
   }
 
@@ -103,18 +96,12 @@ bool analyzeCoordinate(int xCoord, int yCoord, vector<vector<char>> &matrix, vec
   if (xCoord != 0)
   {
     int xLeft = xCoord - 1;
-    if (bombs[yCoord][xLeft] == 1)
-    {
-      bombsAround++;
-    }
+    bombsAround += checkBombs(xLeft, yCoord, bombs);
   }
   if (xCoord != (matrix[0].size() - 1))
   {
     int xRight = xCoord + 1;
-    if (bombs[yCoord][xRight] == 1)
-    {
-      bombsAround++;
-    }
+    bombsAround += checkBombs(xRight, yCoord, bombs);
   }
 
   // Alapuolinen x-akseli, jos on
@@ -127,25 +114,17 @@ bool analyzeCoordinate(int xCoord, int yCoord, vector<vector<char>> &matrix, vec
     {
       int xLeft = xCoord - 1;
       if (bombs[yDown][xLeft] == 1)
-      {
-        bombsAround++;
-      }
+        bombsAround += checkBombs(xLeft, yDown, bombs);
     }
 
     // Alakeski
-    if (bombs[yDown][xCoord] == 1)
-    {
-      bombsAround++;
-    }
+    bombsAround += checkBombs(xCoord, yDown, bombs);
 
     // Alaoikea
     if (xCoord != (matrix[0].size() - 1))
     {
       int xRight = xCoord + 1;
-      if (bombs[yDown][xRight] == 1)
-      {
-        bombsAround++;
-      }
+      bombsAround += checkBombs(xRight, yDown, bombs);
     }
   }
 
@@ -162,8 +141,16 @@ bool analyzeCoordinate(int xCoord, int yCoord, vector<vector<char>> &matrix, vec
     matrix[yCoord][xCoord] = ',';
     return true;
   }
+}
 
-  // return bombsAround != 0 ? c : ' ';
+void checkNeighbourBombs(int xCoord, int yCoord, vector<vector<char>> &matrix, vector<vector<int>> bombs)
+{
+  if (bombs[yCoord][xCoord] == 0 && matrix[yCoord][xCoord] != ' ')
+  {
+    matrix[yCoord][xCoord] = ',';
+  }
+
+  return;
 }
 
 void analyzeNeighbours(int xCoord, int yCoord, vector<vector<char>> &matrix, vector<vector<int>> bombs)
@@ -177,26 +164,17 @@ void analyzeNeighbours(int xCoord, int yCoord, vector<vector<char>> &matrix, vec
     if (xCoord != 0)
     {
       int xLeft = xCoord - 1;
-      if (bombs[yUp][xLeft] == 0 && matrix[yUp][xLeft] != ' ')
-      {
-        matrix[yUp][xLeft] = ',';
-      }
+      checkNeighbourBombs(yUp, xLeft, matrix, bombs);
     }
 
     // Yläkeski
-    if (bombs[yUp][xCoord] == 0 && matrix[yUp][xCoord] != ' ')
-    {
-      matrix[yUp][xCoord] = ',';
-    }
+    checkNeighbourBombs(xCoord, yUp, matrix, bombs);
 
     // Yläoikea
     if (xCoord != (matrix[0].size() - 1))
     {
       int xRight = xCoord + 1;
-      if (bombs[yUp][xRight] == 0 && matrix[yUp][xRight] != ' ')
-      {
-        matrix[yUp][xRight] = ',';
-      }
+      checkNeighbourBombs(xRight, yUp, matrix, bombs);
     }
   }
 
@@ -204,18 +182,12 @@ void analyzeNeighbours(int xCoord, int yCoord, vector<vector<char>> &matrix, vec
   if (xCoord != 0)
   {
     int xLeft = xCoord - 1;
-    if (bombs[yCoord][xLeft] == 0 && matrix[yCoord][xLeft] != ' ')
-    {
-      matrix[yCoord][xLeft] = ',';
-    }
+    checkNeighbourBombs(xLeft, yCoord, matrix, bombs);
   }
   if (xCoord != (matrix[0].size() - 1))
   {
     int xRight = xCoord + 1;
-    if (bombs[yCoord][xRight] == 0 && matrix[yCoord][xRight] != ' ')
-    {
-      matrix[yCoord][xRight] = ',';
-    }
+    checkNeighbourBombs(xRight, yCoord, matrix, bombs);
   }
 
   // Alapuolinen x-akseli, jos on
@@ -227,26 +199,17 @@ void analyzeNeighbours(int xCoord, int yCoord, vector<vector<char>> &matrix, vec
     if (xCoord != 0)
     {
       int xLeft = xCoord - 1;
-      if (bombs[yDown][xLeft] == 0 && matrix[yDown][xLeft] != ' ')
-      {
-        matrix[yDown][xLeft] = ',';
-      }
+      checkNeighbourBombs(xLeft, yDown, matrix, bombs);
     }
 
     // Alakeski
-    if (bombs[yDown][xCoord] == 0 && matrix[yDown][xCoord] != ' ')
-    {
-      matrix[yDown][xCoord] = ',';
-    }
+    checkNeighbourBombs(xCoord, yDown, matrix, bombs);
 
     // Alaoikea
     if (xCoord != (matrix[0].size() - 1))
     {
       int xRight = xCoord + 1;
-      if (bombs[yDown][xRight] == 0 && matrix[yDown][xRight] != ' ')
-      {
-        matrix[yDown][xRight] = ',';
-      }
+      checkNeighbourBombs(xRight, yDown, matrix, bombs);
     }
   }
 
@@ -269,7 +232,7 @@ void cleanUp(vector<vector<char>> &matrix, vector<vector<int>> bombs)
           noChecks = false;
           int xCoord = j;
           int yCoord = i;
-          bool checkAround = analyzeCoordinate(xCoord, yCoord, matrix, bombs);
+          bool checkAround = analyzeSelf(xCoord, yCoord, matrix, bombs);
 
           if (checkAround)
             analyzeNeighbours(xCoord, yCoord, matrix, bombs);
@@ -301,7 +264,7 @@ bool check(vector<vector<string>> inputs, vector<vector<char>> &matrix, vector<v
         {
           int xCoord = j;
           int yCoord = i;
-          bool checkAround = analyzeCoordinate(xCoord, yCoord, matrix, bombs);
+          bool checkAround = analyzeSelf(xCoord, yCoord, matrix, bombs);
 
           if (checkAround)
             analyzeNeighbours(xCoord, yCoord, matrix, bombs);
