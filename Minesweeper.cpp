@@ -362,7 +362,7 @@ void minesweeperLoop(int pX, int pY, int pBombs)
     // Lopettaa pelin saatana
     if (choice == "exit" || choice == "EXIT")
     {
-      cout << "\n\n\n\n\n\n\n\n\n"
+      cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"
            << endl;
       break;
     }
@@ -370,17 +370,17 @@ void minesweeperLoop(int pX, int pY, int pBombs)
     // Poistuu pelistä jos on false
     if (!checkCoordinate(inputCoord, symbolCoord, bombCoord, choice))
     {
-      cout << "\n\n\n\n\n\n\n"
+      cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"
            << endl;
       buildBoard(symbolCoord, bombCoord);
       cout << "You lose! :(" << endl;
       cin.get();
-      cout << "\n\n\n\n\n\n\n\n\n"
+      cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"
            << endl;
       break;
     }
 
-    cout << "\n\n\n\n\n\n\n"
+    cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"
          << endl;
 
     cleanUp(symbolCoord, bombCoord);
@@ -396,7 +396,7 @@ void minesweeperLoop(int pX, int pY, int pBombs)
       chrono::duration<double> seconds = stop - start;
       cout << "You win! Your time is " << chrono::duration_cast<chrono::seconds>(seconds).count() << " seconds. Congrats! :)" << endl;
       cin.get();
-      cout << "\n\n\n\n\n\n\n\n\n"
+      cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"
            << endl;
       break;
     }
@@ -449,22 +449,22 @@ void initMinesweeper()
       switch (diffOption)
       {
       case 1:
-        cout << "\n\n\n\n\n\n\n\n\n"
+        cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"
              << endl;
         minesweeperLoop(9, 9, 10);
         break;
       case 2:
-        cout << "\n\n\n\n\n\n\n\n\n"
+        cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"
              << endl;
         minesweeperLoop(16, 16, 40);
         break;
       case 3:
-        cout << "\n\n\n\n\n\n\n\n\n"
+        cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"
              << endl;
         minesweeperLoop(30, 16, 99);
         break;
       default:
-        cout << "\n\n\n\n\n\n\n\n\n"
+        cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"
              << endl;
         minesweeperLoop(9, 9, 10);
         break;

@@ -5,7 +5,7 @@
 
 void showDescription(Game g)
 {
-  cout << "\n\n\n\n\n\n\n\n\n"
+  cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"
        << endl;
   string choice;
   int gameOption;
@@ -27,7 +27,7 @@ void showDescription(Game g)
       switch (gameOption)
       {
       case 1:
-        cout << "\n\n\n\n\n\n\n\n\n"
+        cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"
              << endl;
         g.start();
         break;
@@ -46,7 +46,7 @@ void showDescription(Game g)
       cin.get();
     }
 
-    cout << "\n\n\n\n\n\n\n\n\n"
+    cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"
          << endl;
   } while (loop);
 }
@@ -117,7 +117,7 @@ void startMenu(GameMenu game)
       gameOption = 0;
     }
 
-    cout << "\n\n\n\n\n\n\n\n\n"
+    cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"
          << endl;
 
   } while (true);
