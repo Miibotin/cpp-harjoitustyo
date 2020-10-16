@@ -1,10 +1,9 @@
-// WIP työ
-
 #include <iostream>
 #include <string>
 #include <algorithm>
 #include <stdlib.h>
-#include <time.h>
+#include <ctime>
+#include <chrono>
 #include <vector>
 
 #include "Minesweeper.h"
@@ -164,7 +163,7 @@ void analyzeNeighbours(int xCoord, int yCoord, vector<vector<char>> &matrix, vec
     if (xCoord != 0)
     {
       int xLeft = xCoord - 1;
-      checkNeighbourBombs(yUp, xLeft, matrix, bombs);
+      checkNeighbourBombs(xLeft, yUp, matrix, bombs);
     }
 
     // Yläkeski
@@ -359,6 +358,8 @@ void minesweeperLoop(int pX, int pY, int pBombs)
 
   build(symbolCoord);
 
+  auto start = chrono::system_clock::now();
+
   // Pelin loop joka jatkuu niin kauan, kunnes pelaaja kirjoittaa konsoliin X-kirjaimen
   while (true)
   {
@@ -392,7 +393,9 @@ void minesweeperLoop(int pX, int pY, int pBombs)
 
     if (victory)
     {
-      cout << "You win! :)" << endl;
+      auto stop = chrono::system_clock::now();
+      chrono::duration<double> seconds = stop - start;
+      cout << "You win! Your time is " << chrono::duration_cast<chrono::seconds>(seconds).count() << " seconds. Congrats! :)" << endl;
       cin.get();
       break;
     }
@@ -406,56 +409,69 @@ void initMinesweeper()
   int diffOption;
   bool loop = false;
 
-  do
+  while (true)
   {
-    loop = false;
     cout << "\n\n\n\n\n\n\n\n\n"
          << endl;
-    cout << "Select your difficulty: Easy (1), Medium (2), Hard (3)" << endl;
+    cout << "WELCOME TO MINESWEEPER!\n"
+         << endl;
 
-    cin >> choice;
-    try
+    do
     {
-      diffOption = stoi(choice);
+      loop = false;
+      cout << "Select your difficulty: Easy (1), Medium (2), Hard (3)\nOther options: Quit (exit)" << endl;
 
-      if (diffOption < 1 && diffOption > 3)
+      cin >> choice;
+
+      if (choice == "exit" || choice == "EXIT")
+        return;
+
+      try
       {
+        diffOption = stoi(choice);
+
+        if (diffOption < 1 && diffOption > 3)
+        {
+          loop = true;
+          cout << "Please give a number representing one of the options above!" << endl;
+          cin.get();
+          cin.get();
+        }
+      }
+      catch (const std::exception &e)
+      {
+        cerr << "Please give a number representing one of the options above!" << endl;
         loop = true;
-        cout << "Please give a number representing one of the options above!" << endl;
         cin.get();
         cin.get();
       }
-    }
-    catch (const std::exception &e)
-    {
-      cerr << "Please give a number representing one of the options above!" << endl;
-      loop = true;
-      cin.get();
-      cin.get();
-    }
-  } while (loop);
+    } while (loop);
 
-  switch (diffOption)
-  {
-  case 1:
-    cout << "\n\n\n\n\n\n\n\n\n"
-         << endl;
-    minesweeperLoop(9, 9, 10);
-    break;
-  case 2:
-    cout << "\n\n\n\n\n\n\n\n\n"
-         << endl;
-    minesweeperLoop(16, 16, 40);
-    break;
-  case 3:
-    cout << "\n\n\n\n\n\n\n\n\n"
-         << endl;
-    minesweeperLoop(30, 16, 99);
-    break;
-  default:
-    cout << "\n\n\n\n\n\n\n\n\n"
-         << endl;
-    minesweeperLoop(9, 9, 10);
-    break;
+    if (choice != "exit" || choice != "EXIT")
+    {
+      switch (diffOption)
+      {
+      case 1:
+        cout << "\n\n\n\n\n\n\n\n\n"
+             << endl;
+        minesweeperLoop(9, 9, 10);
+        break;
+      case 2:
+        cout << "\n\n\n\n\n\n\n\n\n"
+             << endl;
+        minesweeperLoop(16, 16, 40);
+        break;
+      case 3:
+        cout << "\n\n\n\n\n\n\n\n\n"
+             << endl;
+        minesweeperLoop(30, 16, 99);
+        break;
+      default:
+        cout << "\n\n\n\n\n\n\n\n\n"
+             << endl;
+        minesweeperLoop(9, 9, 10);
+        break;
+      }
+    }
   }
 }
