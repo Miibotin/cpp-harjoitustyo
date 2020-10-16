@@ -11,6 +11,7 @@ int Game::count = 0; // Vain alun pelien alustusta varten. Muuten tätä ei enä
 void test()
 {
   cout << 1 + 2 << endl;
+  cin.get();
 }
 
 GameMenu initGames()

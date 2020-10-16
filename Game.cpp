@@ -8,6 +8,7 @@ using namespace std;
 void noGame()
 {
   cout << "Error: No game available!" << endl;
+  cin.get();
 }
 
 Game::Game()

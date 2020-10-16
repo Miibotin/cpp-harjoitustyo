@@ -357,10 +357,15 @@ void minesweeperLoop(int pX, int pY, int pBombs)
   {
 
     cin >> choice;
+    cin.ignore();
 
     // Lopettaa pelin saatana
     if (choice == "exit" || choice == "EXIT")
+    {
+      cout << "\n\n\n\n\n\n\n\n\n"
+           << endl;
       break;
+    }
 
     // Poistuu pelistä jos on false
     if (!checkCoordinate(inputCoord, symbolCoord, bombCoord, choice))
@@ -370,6 +375,8 @@ void minesweeperLoop(int pX, int pY, int pBombs)
       buildBoard(symbolCoord, bombCoord);
       cout << "You lose! :(" << endl;
       cin.get();
+      cout << "\n\n\n\n\n\n\n\n\n"
+           << endl;
       break;
     }
 
@@ -389,10 +396,11 @@ void minesweeperLoop(int pX, int pY, int pBombs)
       chrono::duration<double> seconds = stop - start;
       cout << "You win! Your time is " << chrono::duration_cast<chrono::seconds>(seconds).count() << " seconds. Congrats! :)" << endl;
       cin.get();
+      cout << "\n\n\n\n\n\n\n\n\n"
+           << endl;
       break;
     }
   }
-  cin.get();
 }
 
 void initMinesweeper()
@@ -403,8 +411,6 @@ void initMinesweeper()
 
   while (true)
   {
-    cout << "\n\n\n\n\n\n\n\n\n"
-         << endl;
     cout << "WELCOME TO MINESWEEPER!\n"
          << endl;
 
@@ -414,6 +420,7 @@ void initMinesweeper()
       cout << "Select your difficulty: Easy (1), Medium (2), Hard (3)\nOther options: Quit (exit)" << endl;
 
       cin >> choice;
+      cin.ignore();
 
       if (choice == "exit" || choice == "EXIT")
         return;
@@ -427,14 +434,12 @@ void initMinesweeper()
           loop = true;
           cout << "Please give a number representing one of the options above!" << endl;
           cin.get();
-          cin.get();
         }
       }
       catch (const std::exception &e)
       {
         cerr << "Please give a number representing one of the options above!" << endl;
         loop = true;
-        cin.get();
         cin.get();
       }
     } while (loop);

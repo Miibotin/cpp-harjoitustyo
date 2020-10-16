@@ -18,6 +18,7 @@ void showDescription(Game g)
          << "Options: Play (1), Back (2)" << endl;
 
     cin >> choice;
+    cin.ignore();
 
     try
     {
@@ -26,6 +27,8 @@ void showDescription(Game g)
       switch (gameOption)
       {
       case 1:
+        cout << "\n\n\n\n\n\n\n\n\n"
+             << endl;
         g.start();
         break;
       case 2:
@@ -34,14 +37,12 @@ void showDescription(Game g)
       default:
         cout << "Please give a number representing one of the options above!" << endl;
         cin.get();
-        cin.get();
         break;
       }
     }
     catch (const std::exception &e)
     {
       cerr << "Please give a number representing one of the options above!" << endl;
-      cin.get();
       cin.get();
     }
 
@@ -99,6 +100,7 @@ void startMenu(GameMenu game)
 
     cout << "\nOther actions: Quit (exit)" << endl;
     cin >> choice;
+    cin.ignore();
 
     if (choice == "exit" || choice == "EXIT")
       break;
@@ -111,7 +113,6 @@ void startMenu(GameMenu game)
     catch (const std::exception &e)
     {
       cerr << "Please give a proper number between 1 and " << game.gameAmount << "!" << endl;
-      cin.get();
       cin.get();
       gameOption = 0;
     }
