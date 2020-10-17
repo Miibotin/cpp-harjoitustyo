@@ -3,6 +3,8 @@
 #include "Game.h"
 #include "GameMenu.h"
 
+using namespace std;
+
 void showDescription(Game g)
 {
   cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"
@@ -10,10 +12,13 @@ void showDescription(Game g)
   string choice;
   int gameOption;
   bool loop = true;
+  string name = g.getName();
+  if (name == "")
+    name = "NO_GAME";
 
   do
   {
-    cout << "Game: " << g.getName() << "\n\n\n"
+    cout << "Game: " << name << "\n\n"
          << "Description: " << g.getDesc() << "\n\n"
          << "Options: Play (1), Back (2)" << endl;
 
@@ -81,7 +86,7 @@ void startMenu(GameMenu game)
     {
       string name = game.getGame(i).getName();
       if (name == "")
-        name = "Error: no game found!";
+        name = "NO_GAME";
 
       cout << "Game #" << (i + 1) << ": " << name;
 

@@ -14,7 +14,7 @@ void noGame()
 Game::Game()
 {
   name = "";
-  description = "This is just a placeholder text, which means this game is either non-existent or developer forgot to include any description for this.";
+  description = "";
   start = &noGame;
   count++;
 }
@@ -39,7 +39,10 @@ string Game::getName()
 
 string Game::getDesc()
 {
-  return description;
+  if (this->description.length() > 0)
+    return description;
+  else
+    return "This is just a placeholder text, which means this game is either non-existent or developer forgot to include any description for this.";
 }
 
 int Game::getGameAmount()

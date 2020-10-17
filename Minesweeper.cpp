@@ -434,6 +434,8 @@ void initMinesweeper()
           loop = true;
           cout << "Please give a number representing one of the options above!" << endl;
           cin.get();
+          cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"
+               << endl;
         }
       }
       catch (const std::exception &e)
@@ -441,6 +443,8 @@ void initMinesweeper()
         cerr << "Please give a number representing one of the options above!" << endl;
         loop = true;
         cin.get();
+        cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"
+             << endl;
       }
     } while (loop);
 
