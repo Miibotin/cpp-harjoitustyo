@@ -5,6 +5,8 @@
 
 using namespace std;
 
+// Shows the information of the chosen game. Also includes the option to play the game itself.
+// @param Game g - the chosen game.
 void showDescription(Game g)
 {
   cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"
@@ -25,6 +27,7 @@ void showDescription(Game g)
     cin >> choice;
     cin.ignore();
 
+    // Quick check to see if user gives an integer.
     try
     {
       gameOption = stoi(choice);
@@ -32,14 +35,17 @@ void showDescription(Game g)
       switch (gameOption)
       {
       case 1:
+        // Starts the game.
         cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"
              << endl;
         g.start();
         break;
       case 2:
+        // Goes back to the game menu.
         loop = false;
         break;
       default:
+        // Works as a error handler, if the user tries to give the wrong number.
         cout << "Please give a number representing one of the options above!" << endl;
         cin.get();
         break;
@@ -56,14 +62,16 @@ void showDescription(Game g)
   } while (loop);
 }
 
-void startMenu(GameMenu game)
+// Main function of the startup. Handles the printing of the banner, the menu and the games.
+// @param GameMenu menu - Menu itself that is essential for the application's runtime.
+void startMenu(GameMenu menu)
 {
   string choice;
   int gameOption;
 
-  if (game.gameAmount == 0)
+  if (menu.gameAmount == 0)
   {
-    cout << "An error has occured: the amount of games initialized is " << game.gameAmount << ". Please fix the error and try again." << endl;
+    cout << "An error has occured: the amount of games initialized is " << menu.gameAmount << ". Please fix the error and try again." << endl;
     cin.get();
     return;
   }
@@ -76,22 +84,23 @@ void startMenu(GameMenu game)
        << "*    **   **     ****   ****    ****     ****    *       *   ****  *" << endl
        << "********************************************************************" << endl;
 
-  // LOOPATAAN KUNNES KÄYTTÄJÄ KIRJOITTAA exit/EXIT
+  // Loops infinitely until user gives either 'exit' or 'EXIT'
   do
   {
-    cout << game.welcome() << "\n"
+    cout << menu.welcome() << "\n"
          << endl;
 
-    for (int i = 0; i < game.gameAmount; i++)
+    // Loop that prints the games.
+    for (int i = 0; i < menu.gameAmount; i++)
     {
-      string name = game.getGame(i).getName();
+      string name = menu.getGame(i).getName();
       if (name == "")
         name = "NO_GAME";
 
       cout << "Game #" << (i + 1) << ": " << name;
 
-      // Lisää uuden rivin iteraation perään mikäli kyseinen iteraatio on rivin kolmas ja se ei ole viimeinen iteraatio
-      if ((i + 1) % 3 == 0 && (i + 1) != game.gameAmount)
+      // Adds a new line after every iteration, if the current iteration is the third of the line and it's not the last iteration of the loop.
+      if ((i + 1) % 3 == 0 && (i + 1) != menu.gameAmount)
       {
         cout << endl;
       }
@@ -107,17 +116,19 @@ void startMenu(GameMenu game)
     cin >> choice;
     cin.ignore();
 
+    // Terminates the application.
     if (choice == "exit" || choice == "EXIT")
       break;
 
+    // Quick check to see if user gives an integer.
     try
     {
       gameOption = stoi(choice);
-      showDescription(game.getGame((gameOption - 1)));
+      showDescription(menu.getGame((gameOption - 1)));
     }
     catch (const std::exception &e)
     {
-      cerr << "Please give a proper number between 1 and " << game.gameAmount << "!" << endl;
+      cerr << "Please give a proper number between 1 and " << menu.gameAmount << "!" << endl;
       cin.get();
       gameOption = 0;
     }

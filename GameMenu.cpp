@@ -1,15 +1,18 @@
+// GameMenu-class wherefrom the menu itself is generated.
+
 #include "GameMenu.h"
 #include "Game.h"
-#include <iostream>
 
 GameMenu::GameMenu()
 {
   int size = 0;
   games = new Game[size];
   gameAmount = size;
-  welcomeLetter = "This is just a placeholder, which means the gamemenu was not initialized properly. Please correct the mistake and try again.";
+  welcomeLetter = "This is just a placeholder, which means the menu was not initialized properly. Please correct the mistake and try again.";
 }
 
+// @param int size - determines the size of the games-array.
+// @param string pLetter - the message that is printed at the beginning.
 GameMenu::GameMenu(int size, string pLetter)
 {
   games = new Game[size];
@@ -20,10 +23,11 @@ GameMenu::GameMenu(int size, string pLetter)
 GameMenu::~GameMenu()
 {
   // cout << "Releasing memory... ";
-  delete[] games;
+  delete[] games; // Memory address holding the games is released at the end of application's lifecycle.
   // cout << "Done!" << endl;
 }
 
+// Inserts a new game into the menu.
 bool GameMenu::addGames(Game g)
 {
   bool val;
@@ -50,11 +54,12 @@ bool GameMenu::addGames(Game g)
   return val;
 }
 
+// Returns the game based on the index-value.
+// @param int index - array index, where the wanted game is held.
 Game GameMenu::getGame(int index)
 {
   if (index > gameAmount)
   {
-    cout << "Error: index out of range!" << endl;
     Game empty;
     return empty;
   }
@@ -70,6 +75,7 @@ Game GameMenu::getGame(int index)
   }
 }
 
+// Retunrs the welcome-text, which is printed at the beginning of application's lifecycle.
 string GameMenu::welcome()
 {
   return welcomeLetter;

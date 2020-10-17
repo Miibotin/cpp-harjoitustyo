@@ -1,10 +1,15 @@
+// GameMenu-header file, which includes the declaration of the GameMenu-class.
+
 #pragma once
-#include "Game.h"
+
 #include <string>
 #include <memory>
 
+#include "Game.h"
+
 using namespace std;
 
+// Class which handles the menu of the application and all of it's games.
 class GameMenu
 {
 private:

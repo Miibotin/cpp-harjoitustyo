@@ -5,6 +5,7 @@
 
 using namespace std;
 
+// Class which handles the data of a game and it's startup logic.
 class Game
 {
 private:
@@ -13,7 +14,7 @@ private:
 
 public:
   static int count;
-  function<void()> start;
+  function<void()> start; // Function where the start of the game's logic is included.
 
 public:
   Game();

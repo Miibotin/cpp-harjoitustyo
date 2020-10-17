@@ -1,8 +1,9 @@
+// CLI-Minesweeper
+
 #include <iostream>
 #include <string>
 #include <algorithm>
 #include <stdlib.h>
-#include <ctime>
 #include <chrono>
 #include <vector>
 
@@ -10,14 +11,16 @@
 
 using namespace std;
 
-// Rakennetaan lauta
+// Prints the board of the game.
+// @param vector<vector<char>> matrix - 2d vector of symbols, which represents the current state of the tiles.
+// @param vector<vector<int>> bombs - 2d vector which holds the coordinates of the bombs.
 void buildBoard(vector<vector<char>> matrix, vector<vector<int>> bombs = vector<vector<int>>())
 {
   char letter = 'A';
 
   for (int i = 0; i < matrix.size(); i++)
   {
-    // Jos eka loop, kirjoitetaan konsoliin x-koordinaatistoa indikoivat luvut
+    // If first loop, prints the numbers representing the x-axis.
     if (i == 0)
     {
       cout << "# | ";
@@ -45,15 +48,17 @@ void buildBoard(vector<vector<char>> matrix, vector<vector<int>> bombs = vector<
 
     cout << letter++ << " | ";
 
-    // Kirjoitetaan y-koordinaatistoa indikoivat kirjaimet ja itse pelilaudan rivit
+    // Prints the rows of letters representing the y-axis and the board itself.
     for (int j = 0; j < matrix[0].size(); j++)
     {
       if (bombs != vector<vector<int>>() && bombs[i][j] == 1 && matrix[i][j] == '#')
       {
+        // If the game's over the bombs are also printed.
         cout << "* ";
       }
       else
       {
+        // If the game coninues normally the current state of each tile is printed.
         cout << matrix[i][j] << " ";
       }
     }
@@ -61,102 +66,122 @@ void buildBoard(vector<vector<char>> matrix, vector<vector<int>> bombs = vector<
   }
 }
 
-void checkNeighbourBombs(int xCoord, int yCoord, vector<vector<char>> &matrix, vector<vector<int>> bombs)
+// Used by analyzeNeighbours-functions to see if the neighbouring tile is yet to be analyzed.
+// @param int xCoord - position of the neighbour tile in x-axis.
+// @param int yCoord - position of the neighbour tile in y-axis.
+// @param vector<vector<char>> matrix - reference to the 2d vector, which represents the current state of the tiles.
+void checkNeighbourTile(int xCoord, int yCoord, vector<vector<char>> &matrix)
 {
-  if (bombs[yCoord][xCoord] == 0 && matrix[yCoord][xCoord] != ' ')
+  if (matrix[yCoord][xCoord] != ' ')
   {
     matrix[yCoord][xCoord] = ',';
   }
-
   return;
 }
 
-void analyzeNeighbours(int xCoord, int yCoord, vector<vector<char>> &matrix, vector<vector<int>> bombs)
+// Runs the tile check once again to determine if neighbour tiles needs to be checked. This is ran only if the tile in xCoord and yCoord is an empty tile with no bombs around. Declares the current tile from ','-tile to an empty ' '-tile at the end to indicate that the tile is empty and it's not needed to be checked again.
+// @param int xCoord - position of the tile in x-axis.
+// @param int yCoord - position of the tile in y-axis.
+// @param vector<vector<char>> matrix - reference to the 2d vector, which represents the current state of the tile.
+void analyzeNeighbours(int xCoord, int yCoord, vector<vector<char>> &matrix)
 {
-  // Yläpuolinen x-akseli, jos on
+  // Upper x-axis, if there's any.
   if (yCoord != 0)
   {
     int yUp = yCoord - 1;
 
-    // Ylävasen
+    // Upper left
     if (xCoord != 0)
     {
       int xLeft = xCoord - 1;
-      checkNeighbourBombs(xLeft, yUp, matrix, bombs);
+      checkNeighbourTile(xLeft, yUp, matrix);
     }
 
-    // Yläkeski
-    checkNeighbourBombs(xCoord, yUp, matrix, bombs);
+    // Upper mid.
+    checkNeighbourTile(xCoord, yUp, matrix);
 
-    // Yläoikea
+    // Upper right.
     if (xCoord != (matrix[0].size() - 1))
     {
       int xRight = xCoord + 1;
-      checkNeighbourBombs(xRight, yUp, matrix, bombs);
+      checkNeighbourTile(xRight, yUp, matrix);
     }
   }
 
-  // Saman y-akselin x-akseli
+  // X-axis of the same y-axis.
+  // Left.
   if (xCoord != 0)
   {
     int xLeft = xCoord - 1;
-    checkNeighbourBombs(xLeft, yCoord, matrix, bombs);
+    checkNeighbourTile(xLeft, yCoord, matrix);
   }
+
+  // Right.
   if (xCoord != (matrix[0].size() - 1))
   {
     int xRight = xCoord + 1;
-    checkNeighbourBombs(xRight, yCoord, matrix, bombs);
+    checkNeighbourTile(xRight, yCoord, matrix);
   }
 
-  // Alapuolinen x-akseli, jos on
+  // Bottom x-axis, if there's any.
   if (yCoord != (matrix.size() - 1))
   {
     int yDown = yCoord + 1;
 
-    // Alavasen
+    // Bottom left.
     if (xCoord != 0)
     {
       int xLeft = xCoord - 1;
-      checkNeighbourBombs(xLeft, yDown, matrix, bombs);
+      checkNeighbourTile(xLeft, yDown, matrix);
     }
 
-    // Alakeski
-    checkNeighbourBombs(xCoord, yDown, matrix, bombs);
+    // Bottom middle.
+    checkNeighbourTile(xCoord, yDown, matrix);
 
-    // Alaoikea
+    // Bottom right
     if (xCoord != (matrix[0].size() - 1))
     {
       int xRight = xCoord + 1;
-      checkNeighbourBombs(xRight, yDown, matrix, bombs);
+      checkNeighbourTile(xRight, yDown, matrix);
     }
   }
 
+  // Finally marks the current tile to be empty, so it won't be analyzed anymore.
   matrix[yCoord][xCoord] = ' ';
 }
 
+// Checks if there's a bomb in the neighbouring tile.
+// @param int xCoord - position of the tile in x-axis.
+// @param int yCoord - position of the tile in y-axis.
+// @param vector<vector<int>> bombs - 2d vector which holds the coordinates of the bombs.
+// @return int - value that is added to the bombsAround-variable.
 int checkBombs(int xCoord, int yCoord, vector<vector<int>> bombs) { return bombs[yCoord][xCoord] == 1 ? 1 : 0; }
 
+// Function that checks around the current tile to see if there's any bombs around.
+// @param int xCoord - position of the tile in x-axis.
+// @param int yCoord - position of the tile in y-axis.
+// @param vector<vector<char>> matrix - reference to the 2d vector, which represents the current state of the tile.
+// @param vector<vector<int>> bombs - 2d vector which holds the coordinates of the bombs.
 void analyzeSelf(int xCoord, int yCoord, vector<vector<char>> &matrix, vector<vector<int>> bombs)
 {
-  // MUUTA SITEN, ETTÄ NAAPURI-PAIKKOJEN ALUEET TUTKITAAN JA CLEANUP-FUNKTIO LAUAKAISTAAN JOS YMPÄRILLÄ EI OLE YHTÄÄN POMMIA
   int bombsAround = 0;
 
-  // Yläpuolinen x-akseli, jos on
+  // Upper x-axis, if there's any.
   if (yCoord != 0)
   {
     int yUp = yCoord - 1;
 
-    // Ylävasen
+    // Upper left.
     if (xCoord != 0)
     {
       int xLeft = xCoord - 1;
       bombsAround += checkBombs(xLeft, yUp, bombs);
     }
 
-    // Yläkeski
+    // Upper mid.
     bombsAround += checkBombs(xCoord, yUp, bombs);
 
-    // Yläoikea
+    // Upper right.
     if (xCoord != (matrix[0].size() - 1))
     {
       int xRight = xCoord + 1;
@@ -164,24 +189,27 @@ void analyzeSelf(int xCoord, int yCoord, vector<vector<char>> &matrix, vector<ve
     }
   }
 
-  // Saman y-akselin x-akseli
+  // X-axis of the same y-axis.
+  // Left.
   if (xCoord != 0)
   {
     int xLeft = xCoord - 1;
     bombsAround += checkBombs(xLeft, yCoord, bombs);
   }
+
+  // Right.
   if (xCoord != (matrix[0].size() - 1))
   {
     int xRight = xCoord + 1;
     bombsAround += checkBombs(xRight, yCoord, bombs);
   }
 
-  // Alapuolinen x-akseli, jos on
+  // Bottom x-axis, if there's any
   if (yCoord != (matrix.size() - 1))
   {
     int yDown = yCoord + 1;
 
-    // Alavasen
+    // Bottom left
     if (xCoord != 0)
     {
       int xLeft = xCoord - 1;
@@ -189,10 +217,10 @@ void analyzeSelf(int xCoord, int yCoord, vector<vector<char>> &matrix, vector<ve
         bombsAround += checkBombs(xLeft, yDown, bombs);
     }
 
-    // Alakeski
+    // Bottom middle
     bombsAround += checkBombs(xCoord, yDown, bombs);
 
-    // Alaoikea
+    // Bottom right
     if (xCoord != (matrix[0].size() - 1))
     {
       int xRight = xCoord + 1;
@@ -200,20 +228,24 @@ void analyzeSelf(int xCoord, int yCoord, vector<vector<char>> &matrix, vector<ve
     }
   }
 
-  // Jos löytyy pommeja lähettyviltä, tulostetaan niiden määrä koordinaattiin ja palautetaan false
   if (bombsAround > 0)
   {
+    // If there's any bombs around the tile, the amount is given to the current tile.
     char c = '0';
     c += bombsAround;
     matrix[yCoord][xCoord] = c;
   }
   else
   {
+    // If there's no bombs around, ','-symbol is given to the current tile and another check runs.
     matrix[yCoord][xCoord] = ',';
-    analyzeNeighbours(xCoord, yCoord, matrix, bombs);
+    analyzeNeighbours(xCoord, yCoord, matrix);
   }
 }
 
+// Loops and checks if there's any ','-symbols left on the board and runs the analyze-function to check them.
+// @param vector<vector<char>> matrix - reference to the 2d vector, which represents the current state of the tile.
+// @param vector<vector<int>> bombs - 2d vector which holds the coordinates of the bombs.
 void cleanUp(vector<vector<char>> &matrix, vector<vector<int>> bombs)
 {
   bool loopEnd = false;
@@ -234,29 +266,35 @@ void cleanUp(vector<vector<char>> &matrix, vector<vector<int>> bombs)
         }
       }
     }
-    loopEnd = noChecks;
+    loopEnd = noChecks; // If the board is free of ','-symbols, the loop will stop.
   } while (!loopEnd);
 }
 
-// Tsekataan kyseinen koordinaatti
+// Checks the coordinate given by the user to determine the state of the tile.
+// @param vector<vector<string>> inputs - 2d vector that represents the available inputs for every coordinate.
+// @param vector<vector<char>> matrix - reference to the 2d vector, which represents the current state of the tile.
+// @param vector<vector<int>> bombs - 2d vector which holds the coordinates of the bombs.
+// @param string choice - Holds the value of a coordinate to be checked given by the user.
+// @return bool - if returned value is false, then the user accidentally chose the bomb coordinate and the game's over.
 bool checkCoordinate(vector<vector<string>> inputs, vector<vector<char>> &matrix, vector<vector<int>> bombs, string choice = "NULL")
 {
-  transform(choice.begin(), choice.end(), choice.begin(), ::toupper); // Muutetaan merkit isoiksi (ei mitään hajua miksi vaaditaan noin, mut se toimii :D)
+  transform(choice.begin(), choice.end(), choice.begin(), ::toupper); // Transforms the choice-variable's letter to uppercase.
   bool skipped = false;
   for (int i = 0; i < matrix.size(); i++)
   {
     for (int j = 0; j < matrix[0].size(); j++)
     {
-      if (inputs[i][j] == choice && matrix[i][j] == '#')
+      if (inputs[i][j] == choice && matrix[i][j] == '#') // Checks the tile if the user input matches the coordinate and its state is still untouched.
       {
         if (bombs[i][j] == 1)
         {
+          // If the coordinate holds a bomb the game's over and the checked tile is marked for the failure.
           matrix[i][j] = 'X';
-
           return false;
         }
         else
         {
+          // If there's no bombs on the tile the analyze-function will be ran.
           int xCoord = j;
           int yCoord = i;
           analyzeSelf(xCoord, yCoord, matrix, bombs);
@@ -265,12 +303,16 @@ bool checkCoordinate(vector<vector<string>> inputs, vector<vector<char>> &matrix
         break;
       }
     }
-    if (skipped)
+    if (skipped) // Ends the loop, when the right coordinate is checked.
       break;
   }
   return true;
 }
 
+// Checks if the victory is gained by comparing the amount of bombs to the current amount of unchecked tiles.
+// @param vector<vector<char>> matrix - 2d vector of symbols, which represents the current state of the tiles.
+// @param int bombs - The amount of bombs on the current game.
+// @return bool - if this is true then the game is won.
 bool checkVictory(vector<vector<char>> matrix, int bombs)
 {
   int check = 0;
@@ -286,24 +328,24 @@ bool checkVictory(vector<vector<char>> matrix, int bombs)
     }
   }
 
-  // Jos tutkimattomia koordinaatteja on enemmän kuin mitä miinoja on kentällä, peli jatkuu
+  // If there's more unchecked tiles than there's bombs, the game continues.
   if (check > bombs)
-  {
-
     return false;
-  }
   else
-  {
     return true;
-  }
 }
 
+// Gameplay loop of the minesweeper. Starts of by initializing all the 2d vectors and their values and starting the timer.
+// @param int pX - amount rows on the board.
+// @param int pY - amount of columns on the board.
+// @param in pBombs - amount of bombs on the board.
 void minesweeperLoop(int pX, int pY, int pBombs)
 {
-  vector<vector<char>> symbolCoord(pY);
-  vector<vector<string>> inputCoord(pY);
-  vector<vector<int>> bombCoord(pY);
+  vector<vector<char>> symbolCoord(pY);  // State of the tiles.
+  vector<vector<string>> inputCoord(pY); // Inputs of the tiles.
+  vector<vector<int>> bombCoord(pY);     // Coordinates for the bombs.
 
+  // INITIALIZING
   for (int i = 0; i < pY; i++)
   {
     for (int j = 0; j < pX; j++)
@@ -322,6 +364,7 @@ void minesweeperLoop(int pX, int pY, int pBombs)
   srand(time(0));
   while (bombs > 0)
   {
+    // Bombs are scattered randomly around the board with this.
     int yCoord = rand() % pY;
     int xCoord = rand() % pX;
     if (bombCoord[yCoord][xCoord] != 1)
@@ -335,13 +378,12 @@ void minesweeperLoop(int pX, int pY, int pBombs)
   cout << "Initializing the board... ";
   for (int i = 0; i < pY; i++)
   {
-
     for (int j = 0; j < pX; j++)
     {
       string str;
       str.push_back(initLetter);
-      symbolCoord[i][j] = '#';
-      inputCoord[i][j] = str + to_string(j + 1);
+      symbolCoord[i][j] = '#';                   // Adding the default '#'-state for every tile.
+      inputCoord[i][j] = str + to_string(j + 1); // Adding the input to represent the tile's coordinate.
     }
     initLetter++;
   }
@@ -350,16 +392,18 @@ void minesweeperLoop(int pX, int pY, int pBombs)
 
   buildBoard(symbolCoord);
 
+  // Starts the timer.
   auto start = chrono::system_clock::now();
+  // END OF GAME INIT
 
-  // Pelin loop joka jatkuu niin kauan, kunnes pelaaja kirjoittaa konsoliin X-kirjaimen
+  // Game loop which continues as long as the player either writes the 'exit'/'EXIT' to the console or he/she finds on the mine.
   while (true)
   {
 
     cin >> choice;
     cin.ignore();
 
-    // Lopettaa pelin saatana
+    // Ends the game.
     if (choice == "exit" || choice == "EXIT")
     {
       cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"
@@ -367,12 +411,12 @@ void minesweeperLoop(int pX, int pY, int pBombs)
       break;
     }
 
-    // Poistuu pelistä jos on false
+    // Ends the game if this is false, a.i. user found the mine.
     if (!checkCoordinate(inputCoord, symbolCoord, bombCoord, choice))
     {
       cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"
            << endl;
-      buildBoard(symbolCoord, bombCoord);
+      buildBoard(symbolCoord, bombCoord); // Rebuilds the board to reveals every bombs location.
       cout << "You lose! :(" << endl;
       cin.get();
       cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"
@@ -387,9 +431,10 @@ void minesweeperLoop(int pX, int pY, int pBombs)
 
     bool victory = checkVictory(symbolCoord, pBombs);
 
-    // Rakennetaan taulukko uusiksi
+    // Rebuilds the board. If vicotry is gained it also reveals every bombs location.
     buildBoard(symbolCoord, victory ? bombCoord : vector<vector<int>>());
 
+    // Victory-logic
     if (victory)
     {
       auto stop = chrono::system_clock::now();
@@ -403,17 +448,20 @@ void minesweeperLoop(int pX, int pY, int pBombs)
   }
 }
 
+// Function that the game menu invokes. Awaits the user's choice of difficulty before initializing the game itself.
 void initMinesweeper()
 {
   string choice;
   int diffOption;
   bool loop = false;
 
+  // Loops until the exit/EXIT is given to the console.
   while (true)
   {
     cout << "WELCOME TO MINESWEEPER!\n"
          << endl;
 
+    // Loops until the user gives a proper answer.
     do
     {
       loop = false;
@@ -422,13 +470,16 @@ void initMinesweeper()
       cin >> choice;
       cin.ignore();
 
+      // Escapes from both loops and quits the game.
       if (choice == "exit" || choice == "EXIT")
         return;
 
+      // Quick check to see if user gives an integer.
       try
       {
         diffOption = stoi(choice);
 
+        // Works as a error handler, if the user tries to give the wrong number.
         if (diffOption < 1 && diffOption > 3)
         {
           loop = true;
@@ -450,24 +501,25 @@ void initMinesweeper()
 
     if (choice != "exit" || choice != "EXIT")
     {
+      // Chooses the difficulty of the game depending on the user's choice.
       switch (diffOption)
       {
-      case 1:
+      case 1: // Easy
         cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"
              << endl;
         minesweeperLoop(9, 9, 10);
         break;
-      case 2:
+      case 2: // Medium
         cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"
              << endl;
         minesweeperLoop(16, 16, 40);
         break;
-      case 3:
+      case 3: // Hard
         cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"
              << endl;
         minesweeperLoop(30, 16, 99);
         break;
-      default:
+      default: // Default easy
         cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"
              << endl;
         minesweeperLoop(9, 9, 10);

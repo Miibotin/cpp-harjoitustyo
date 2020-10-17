@@ -1,11 +1,13 @@
+// FINAL ASSIGNMENT - GAME MENU AND MINESWEEPER
+// BY MIKKO HANNUKAINEN
+
 #include "GameMenu.h"
 #include "Startup.h"
 
-using namespace std;
-
+// Initializes the game menu and sends it to startup.
 int main(void)
 {
-  GameMenu game = initGames();
-  startMenu(game);
+  GameMenu menu = initGames();
+  startMenu(menu);
   return 0;
 }
