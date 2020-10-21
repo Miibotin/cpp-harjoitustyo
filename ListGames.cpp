@@ -11,7 +11,7 @@ int Game::count = 0; // Only for initializing the amount of games the menu handl
 // Just a minor test.
 void test()
 {
-  cout << 1 + 2 << endl;
+  cout << "Hello, world!" << endl;
   cin.get();
 }
 
@@ -21,7 +21,7 @@ GameMenu initGames()
 {
   // INSERT THE GAMES BELOW THIS COMMENT
 
-  Game board("Miinaharava", &initMinesweeper, "Tämä on hankalaa!");
+  Game board("Miinaharava", &initMinesweeper, "Are you smart enough to beat Minesweeper? In this game you're tasked to find the mines by clearing the areas around them, while avoiding the spots that hold the mine inside.\n\nYou can choose between three different difficulties and you have all the time at your disposal.");
   Game helloBoard("Hello World!", &test);
   Game emptyBoard;
 
@@ -30,7 +30,7 @@ GameMenu initGames()
   int amount = Game::count;
 
   // Initializing the menu itself, taking the amount of initialized games to determine the size of the game array.
-  GameMenu menu(amount, "TERVETULOA PELAAMAAN! OLE HYVÄ JA VALITSE PELI KIRJOITTAMALLA SITÄ VASTAAVA NUMERO!");
+  GameMenu menu(amount, "Are you ready to play a game? Please choose the game by writing it's number.");
 
   // REMEMBER TO INCLUDE YOUR GAMES BELOW THIS COMMENT
   if (menu.gameAmount > 0)
