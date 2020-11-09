@@ -1,4 +1,6 @@
-Jaan tänne vaan mun task-komennot...
+### HUOM. TOTEUTETTU VISUAL STUDIO CODE:N AVULLA, JOTEN SLN-TIEDOSTOA VISUAL STUDIO-PROJEKTIA VARTEN EI OLE SAATAVILLA
+
+vscoden task-komennot...
 
 ```
 {
